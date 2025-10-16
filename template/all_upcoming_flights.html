@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+  <h2 class="mb-4 text-center">All Upcoming Flights</h2>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" 
+        href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
+
+  {% if flights %}
+    <div class="table-responsive">
+      <table id="upcomingFlightsTable" 
+             class="display table table-striped table-hover align-middle" 
+             style="width:100%">
+        <thead class="table-dark">
+          <tr>
+            <th>Flight Number</th>
+            <th>Airline</th>
+            <th>Departure Airport</th>
+            <th>Arrival Airport</th>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for flight in flights %}
+          <tr>
+            <td>{{ flight.flight_number }}</td>
+            <td>{{ flight.airline_name }}</td>
+            <td>{{ flight.departure_airport }}</td>
+            <td>{{ flight.arrival_airport }}</td>
+            <td>{{ flight.departure_time }}</td>
+            <td>{{ flight.arrival_time }}</td>
+            <td>{{ flight.price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-warning text-center">
+      No upcoming flights found.
+    </div>
+  {% endif %}
+</div>
+
+<!-- jQuery + DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script 
+  src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js">
+</script>
+<script>
+  $(document).ready(function(){
+    $('#upcomingFlightsTable').DataTable({
+      paging:   true,
+      searching:true,
+      ordering: true,
+      info:     true,
+      autoWidth:false,
+      responsive:true
+    });
+  });
+</script>
+{% endblock %}

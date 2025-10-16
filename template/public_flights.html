@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block extra_styles %}
+<style>
+  .nav-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #008769;
+    border: 1px solid #008769;
+    border-radius: 3px;
+    background-color: transparent;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    margin: 0 10px;
+  }
+  .nav-button:hover {
+    color: #15a885;
+    border-color: #15a885;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <h2>Public Flight Information</h2>
+
+  <!-- Navigation Buttons -->
+  <div class="textBoxContainer shadow rounded" style="text-align: center; margin-top: 20px;">
+    <form action="{{ url_for('public_search_flights') }}" method="get" style="display: inline;">
+      <button type="submit" class="nav-button">Search Upcoming Flights</button>
+    </form>
+    <form action="{{ url_for('public_check_status') }}" method="get" style="display: inline;">
+      <button type="submit" class="nav-button">Check Flight Status</button>
+    </form>
+  </div>
+
+  {% block public_feature %}{% endblock %}
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base_agent.html" %}
+{% block content %}
+  <h3>Top Customers</h3>
+
+  <!-- Top by Number of Tickets -->
+  <h4>Top 5 by Tickets (last 6 months)</h4>
+  {% if top_tickets %}
+    <div style="width:80%; max-width:600px; margin:20px auto;">
+      <canvas id="ticketsChart"></canvas>
+    </div>
+  {% else %}
+    <p>No data for tickets chart.</p>
+  {% endif %}
+
+  <!-- Top by Commission Value -->
+  <h4 style="margin-top:30px;">Top 5 by Commission (last year)</h4>
+  {% if top_commission %}
+    <div style="width:80%; max-width:600px; margin:20px auto;">
+      <canvas id="commissionChart"></canvas>
+    </div>
+  {% else %}
+    <p>No data for commission chart.</p>
+  {% endif %}
+
+ 
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    {% if top_tickets %}
+    const ticketsLabels = {{ top_tickets 
+        | map(attribute='customer_email') 
+        | list 
+        | tojson }};
+    const ticketsData   = {{ top_tickets 
+        | map(attribute='num_tickets') 
+        | list 
+        | tojson }};
+    const ctx1 = document.getElementById('ticketsChart').getContext('2d');
+    new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: ticketsLabels,
+        datasets: [{
+          label: 'Tickets Bought',
+          data: ticketsData,
+          backgroundColor: '#4e79a7'
+        }]
+      },
+      options: {
+        scales: { 
+          y: { beginAtZero: true, title: { display:true, text:'# Tickets' } }
+        },
+        plugins: { legend: { display:false } }
+      }
+    });
+    {% endif %}
+
+    {% if top_commission %}
+    const commissionLabels = {{ top_commission 
+        | map(attribute='customer_email') 
+        | list 
+        | tojson }};
+    const commissionData   = {{ top_commission 
+        | map(attribute='total_commission') 
+        | list 
+        | tojson }};
+    const ctx2 = document.getElementById('commissionChart').getContext('2d');
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: commissionLabels,
+        datasets: [{
+          label: 'Commission Earned',
+          data: commissionData,
+          backgroundColor: '#f28e2b'
+        }]
+      },
+      options: {
+        scales: { 
+          y: { beginAtZero: true, title: { display:true, text:'$ Commission' } }
+        },
+        plugins: { legend: { display:false } }
+      }
+    });
+    {% endif %}
+  </script>
+{% endblock %}

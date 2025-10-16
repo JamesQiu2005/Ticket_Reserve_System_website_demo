@@ -1,0 +1,39 @@
+{% extends "base_staff.html" %}
+{% block content %}
+  <!-- Bootstrap CSS (if not already in base_staff.html) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <div class="container my-5">
+    <div class="card mx-auto" style="max-width: 480px;">
+      <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Grant Permissions</h3>
+      </div>
+      <div class="card-body">
+        {% if message %}
+          <div class="alert alert-info text-center">{{ message }}</div>
+        {% endif %}
+        <form method="POST" action="{{ url_for('staff_grant_permissions') }}">
+          <div class="mb-3">
+            <label for="staff_username" class="form-label">Staff</label>
+            <select id="staff_username" name="staff_username" class="form-select" required>
+              {% for s in staffs %}
+              <option value="{{ s.username }}">{{ s.username }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="permission_type" class="form-label">Permission Type</label>
+            <select id="permission_type" name="permission_type" class="form-select" required>
+              {% for p in permission_types %}
+              <option value="{{ p }}">{{ p }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-success">Grant</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

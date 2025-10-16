@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title or 'Agent Panel' }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="Shortcut Icon" href="{{ url_for('static', filename='nyuicon.ico') }}">
+  <style>
+    body      { font-family: Helvetica, sans-serif; background:#f4f4f4; color:#3d4d5d; margin:0;}
+    header    { background:#57068c; height:60px; display:flex; align-items:center; padding:0 10%; }
+    header img{ max-height:80%; }
+    h1.page   { text-align:center; font-size:40px; margin:30px 0 10px; }
+    .wrap     { display:flex; max-width:1100px; margin:0 auto; }
+    .sidebar  { width:220px; background:#f6f6f6; padding:15px; border-radius:3px;
+                box-shadow:0 0 5px rgba(0,0,0,.3); margin-right:20px; }
+    .sidebar a{ display:block; margin:10px 0; padding:8px; border:1px solid #008769;
+                border-radius:3px; text-align:center; text-decoration:none; color:#008769;}
+    .sidebar a:hover{ color:#15a885; border-color:#15a885;}
+    .content  { flex:1; background:#fff; padding:20px; border-radius:3px;
+                box-shadow:0 0 5px rgba(0,0,0,.3); }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Logo">
+  </header>
+  <h1 class="page">{{ title }}</h1>
+  <div class="wrap">
+    <div class="sidebar">
+      <a href="{{ url_for('agent_home') }}">Home</a>
+      <a href="{{ url_for('agent_my_flights') }}">My Flights</a>
+      <a href="{{ url_for('agent_search_and_purchase') }}">Search/Purchase</a>
+      <a href="{{ url_for('agent_commission') }}">Commission</a>
+      <a href="{{ url_for('agent_top_customers') }}">Top Customers</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</body>
+</html>

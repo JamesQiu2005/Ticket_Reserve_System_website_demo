@@ -1,0 +1,103 @@
+{% extends "base_agent.html" %}
+{% block content %}
+<div class="container my-5">
+  <h3 class="text-center mb-4">Search Flights & Purchase Tickets</h3>
+
+  <!-- Search Form -->
+  <form method="GET" action="{{ url_for('agent_search_and_purchase') }}" class="row g-3 mb-4">
+    <div class="col-md-4">
+      <label for="source_city_or_airport" class="form-label">Source (City or Airport):</label>
+      <input type="text" id="source_city_or_airport" name="source_city_or_airport" class="form-control"
+             placeholder="e.g. Shanghai or PVG"
+             value="{{ request.args.get('source_city_or_airport','') }}">
+    </div>
+    <div class="col-md-4">
+      <label for="destination_city_or_airport" class="form-label">Destination (City or Airport):</label>
+      <input type="text" id="destination_city_or_airport" name="destination_city_or_airport" class="form-control"
+             placeholder="e.g. Beijing or PEK"
+             value="{{ request.args.get('destination_city_or_airport','') }}">
+    </div>
+    <div class="col-md-3">
+      <label for="date" class="form-label">Date:</label>
+      <input type="date" id="date" name="date" class="form-control"
+             value="{{ request.args.get('date','') }}">
+    </div>
+    <div class="col-md-1 d-grid">
+      <button type="submit" class="btn btn-primary mt-4">Search</button>
+    </div>
+  </form>
+
+  <!-- Display Errors or Success -->
+  {% if error %}
+    <div class="alert alert-danger text-center">{{ error }}</div>
+  {% endif %}
+  {% if purchase_success %}
+    <div class="alert alert-success text-center">
+      Ticket purchased successfully! Ticket ID: <strong>{{ ticket_id }}</strong>
+    </div>
+  {% endif %}
+
+  <!-- Search Results -->
+  {% if search_results is not none %}
+    {% if search_results %}
+      <div class="table-responsive">
+        <table id="flightsTable" class="display table table-striped table-hover align-middle" style="width:100%">
+          <thead class="table-dark">
+            <tr>
+              <th>Flight #</th>
+              <th>Airline</th>
+              <th>Dep. Airport</th>
+              <th>Arr. Airport</th>
+              <th>Dep. Time</th>
+              <th>Arr. Time</th>
+              <th>Price</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for flight in search_results %}
+            <tr>
+              <td>{{ flight.flight_number }}</td>
+              <td>{{ flight.airline_name }}</td>
+              <td>{{ flight.departure_airport }}</td>
+              <td>{{ flight.arrival_airport }}</td>
+              <td>{{ flight.departure_time.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td>{{ flight.arrival_time.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td>${{ flight.price }}</td>
+              <td>
+                <form method="POST" action="{{ url_for('agent_search_and_purchase') }}" class="d-flex">
+                  <input type="hidden" name="flight_id" value="{{ flight.flight_id }}">
+                  <input type="email" name="customer_email" class="form-control me-2" placeholder="Customer email" required>
+                  <button type="submit" class="btn btn-success">Purchase</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-warning text-center mt-4">
+        No flights match your search.
+      </div>
+    {% endif %}
+  {% endif %}
+</div>
+
+<!-- DataTables CSS and JS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $('#flightsTable').DataTable({
+      paging:   true,
+      searching:true,
+      ordering: true,
+      info:     true,
+      autoWidth:false,
+      responsive:true
+    });
+  });
+</script>
+{% endblock %}

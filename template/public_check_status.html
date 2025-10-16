@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+  <h2 class="mb-4 text-center">Check Flight Status</h2>
+  
+  <!-- DataTables CSS -->
+  <link rel="stylesheet"
+        href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
+
+  <form method="GET" action="{{ url_for('public_check_status') }}" class="row g-3 align-items-end mb-4">
+    <div class="col-md-4">
+      <label for="flight_number" class="form-label">Flight Number</label>
+      <input type="text" id="flight_number" name="flight_number" class="form-control"
+             placeholder="e.g. MU1001"
+             value="{{ request.args.get('flight_number','') }}">
+    </div>
+    <div class="col-md-4">
+      <label for="departure_date" class="form-label">Departure Date</label>
+      <input type="date" id="departure_date" name="departure_date" class="form-control"
+             value="{{ request.args.get('departure_date','') }}">
+    </div>
+    <div class="col-md-4">
+      <label for="arrival_date" class="form-label">Arrival Date</label>
+      <input type="date" id="arrival_date" name="arrival_date" class="form-control"
+             value="{{ request.args.get('arrival_date','') }}">
+    </div>
+    <div class="col-12 d-grid">
+      <button type="submit" class="btn btn-primary">Check Status</button>
+    </div>
+  </form>
+
+  <hr>
+
+  {% if flight is defined %}
+    {% if flight %}
+      <div class="table-responsive">
+        <table id="statusTable"
+               class="display table table-striped table-hover align-middle"
+               style="width:100%">
+          <thead class="table-dark">
+            <tr>
+              <th>Flight Number</th>
+              <th>Airline</th>
+              <th>Departure Airport</th>
+              <th>Arrival Airport</th>
+              <th>Departure Time</th>
+              <th>Arrival Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ flight.flight_number }}</td>
+              <td>{{ flight.airline_name }}</td>
+              <td>{{ flight.departure_airport }}</td>
+              <td>{{ flight.arrival_airport }}</td>
+              <td>{{ flight.departure_time.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td>{{ flight.arrival_time.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td>{{ flight.flight_status }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-warning text-center">
+        No flight matches your criteria.
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="alert alert-info text-center">
+      Please enter search criteria to check flight status.
+    </div>
+  {% endif %}
+</div>
+
+<!-- jQuery + DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $('#statusTable').DataTable({
+      paging:   false,
+      searching:false,
+      info:     false,
+      autoWidth:false,
+      responsive:true
+    });
+  });
+</script>
+{% endblock %}

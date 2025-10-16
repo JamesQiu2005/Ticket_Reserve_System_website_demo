@@ -1,0 +1,31 @@
+{% extends "base_staff.html" %}
+{% block content %}
+  <!-- Bootstrap CSS (if not already in base_staff.html) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <div class="container my-5">
+    <div class="card mx-auto" style="max-width: 480px;">
+      <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Add Airport</h3>
+      </div>
+      <div class="card-body">
+        {% if message %}
+          <div class="alert alert-info">{{ message }}</div>
+        {% endif %}
+        <form method="POST" action="{{ url_for('staff_add_airplane') }}">
+          <div class="mb-3">
+            <label for="airport_name" class="form-label">Airport Name</label>
+            <input type="text" class="form-control" id="airport_name" name="airport_name" required>
+          </div>
+          <div class="mb-3">
+            <label for="city" class="form-label">City</label>
+            <input type="text" class="form-control" id="city" name="city" required>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-success">Add Airport</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

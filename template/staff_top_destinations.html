@@ -1,0 +1,62 @@
+{% extends "base_staff.html" %}
+{% block content %}
+  <!-- Bootstrap CSS (if not already in base_staff.html) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <div class="container my-5">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Top Destinations</h3>
+      </div>
+      <div class="card-body">
+        <h4>Past 3 Months</h4>
+        {% if last3 %}
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped mt-3">
+              <thead class="table-light">
+                <tr>
+                  <th>Destination</th>
+                  <th>Flights</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in last3 %}
+                <tr>
+                  <td>{{ row.dest }}</td>
+                  <td>{{ row.cnt }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted">No data available.</p>
+        {% endif %}
+
+        <h4 class="mt-4">Past Year</h4>
+        {% if last12 %}
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped mt-3">
+              <thead class="table-light">
+                <tr>
+                  <th>Destination</th>
+                  <th>Flights</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in last12 %}
+                <tr>
+                  <td>{{ row.dest }}</td>
+                  <td>{{ row.cnt }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted">No data available.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

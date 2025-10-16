@@ -1,0 +1,43 @@
+{% extends "base_staff.html" %}
+{% block content %}
+  <h3>Revenue Comparison</h3>
+
+  <div style="width: 400px; display: inline-block;">
+    <h4>Last Month</h4>
+    <canvas id="pieMonth"></canvas>
+  </div>
+  <div style="width: 400px; display: inline-block;">
+    <h4>Last Year</h4>
+    <canvas id="pieYear"></canvas>
+  </div>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // data injected by Jinja
+    const monthData   = [{{ dm }}, {{ im }}];
+    const yearData    = [{{ dy }}, {{ iy }}];
+    const labels      = ['Direct', 'Indirect'];
+    const colors      = ['#4e79a7','#f28e2b'];
+
+    function makePie(ctxId, data) {
+      const ctx = document.getElementById(ctxId).getContext('2d');
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{ data: data, backgroundColor: colors }]
+        },
+        options: {
+          legend: { position: 'bottom' },
+          tooltips: { callbacks: {
+            label: (tt, d) => `${d.labels[tt.index]}: $${tt.yLabel.toLocaleString()}`
+          }}
+        }
+      });
+    }
+
+    makePie('pieMonth', monthData);
+    makePie('pieYear',  yearData);
+  </script>
+{% endblock %}

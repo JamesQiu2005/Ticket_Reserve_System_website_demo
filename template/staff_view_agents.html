@@ -1,0 +1,113 @@
+{% extends "base_staff.html" %}
+
+{% block content %}
+  <!-- Bootstrap CSS (if not already in base_staff.html) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <div class="container my-5">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">All Booking Agents</h3>
+      </div>
+      <div class="card-body">
+        <!-- All Agents -->
+        <h4>All Agents</h4>
+        {% if all_agents %}
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped mt-3">
+              <thead class="table-light">
+                <tr>
+                  <th>Agent Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in all_agents %}
+                <tr>
+                  <td>{{ row.agent_email }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted">No data available.</p>
+        {% endif %}
+
+        <!-- Top 5 by Tickets (Past Month) -->
+        <h4 class="mt-4">Top 5 by Tickets (Past Month)</h4>
+        {% if top_tickets %}
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped mt-3">
+              <thead class="table-light">
+                <tr>
+                  <th>Agent Email</th>
+                  <th>Tickets Sold</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in top_tickets %}
+                <tr>
+                  <td>{{ row.agent_email }}</td>
+                  <td>{{ row.tickets_sold }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted">No data available.</p>
+        {% endif %}
+
+        <!-- Top 5 by Tickets (Past Year) -->
+        <h4 class="mt-4">Top 5 by Tickets (Past Year)</h4>
+        {% if top_tickets_yearly %}
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped mt-3">
+              <thead class="table-light">
+                <tr>
+                  <th>Agent Email</th>
+                  <th>Tickets Sold</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in top_tickets_yearly %}
+                <tr>
+                  <td>{{ row.agent_email }}</td>
+                  <td>{{ row.tickets_sold }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted">No data available.</p>
+        {% endif %}
+
+        <!-- Top 5 by Commission (Past Year) -->
+        <h4 class="mt-4">Top 5 by Commission (Past Year)</h4>
+        {% if top_comm %}
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped mt-3">
+              <thead class="table-light">
+                <tr>
+                  <th>Agent Email</th>
+                  <th>Total Commission</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in top_comm %}
+                <tr>
+                  <td>{{ row.agent_email }}</td>
+                  <td>{{ row.total_commission }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted">No data available.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

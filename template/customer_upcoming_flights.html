@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+  <h2 class="mb-4 text-center">My Upcoming Flights</h2>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" 
+        href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
+
+  <form method="GET" action="{{ url_for('customer_upcoming_flights') }}" class="row g-3 mb-4">
+    <div class="col-md-3">
+      <label for="start_date" class="form-label">Start Date</label>
+      <input type="date" class="form-control" id="start_date" name="start_date" 
+             value="{{ request.args.get('start_date','') }}">
+    </div>
+    <div class="col-md-3">
+      <label for="end_date" class="form-label">End Date</label>
+      <input type="date" class="form-control" id="end_date" name="end_date" 
+             value="{{ request.args.get('end_date','') }}">
+    </div>
+    <div class="col-md-3">
+      <label for="source" class="form-label">Source (City or Airport)</label>
+      <input type="text" class="form-control" id="source" name="source" 
+             placeholder="e.g. Shanghai or PVG" 
+             value="{{ request.args.get('source','') }}">
+    </div>
+    <div class="col-md-3">
+      <label for="destination" class="form-label">Destination (City or Airport)</label>
+      <input type="text" class="form-control" id="destination" name="destination" 
+             placeholder="e.g. Beijing or PEK" 
+             value="{{ request.args.get('destination','') }}">
+    </div>
+    <div class="col-md-12 d-grid">
+      <button type="submit" class="btn btn-primary mt-3">Filter</button>
+    </div>
+  </form>
+
+  <hr>
+
+  {% if flights %}
+    <div class="table-responsive">
+      <table id="customerFlightsTable" 
+             class="display table table-striped table-hover align-middle" 
+             style="width:100%">
+        <thead class="table-dark">
+          <tr>
+            <th>Flight #</th>
+            <th>Airline</th>
+            <th>Departure</th>
+            <th>Arrival</th>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for flight in flights %}
+          <tr>
+            <td>{{ flight['flight_number'] }}</td>
+            <td>{{ flight['airline_name'] }}</td>
+            <td>{{ flight['departure_airport'] }}</td>
+            <td>{{ flight['arrival_airport'] }}</td>
+            <td>{{ flight['departure_time'] }}</td>
+            <td>{{ flight['arrival_time'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-warning text-center">
+      No upcoming flights found.
+    </div>
+  {% endif %}
+</div>
+
+<!-- jQuery + DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script 
+  src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js">
+</script>
+<script>
+  $(document).ready(function(){
+    $('#customerFlightsTable').DataTable({
+      paging:   true,
+      searching:true,
+      ordering: true,
+      info:     true,
+      autoWidth:false,
+      responsive:true
+    });
+  });
+</script>
+{% endblock %}

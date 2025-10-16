@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Ticket Reserve System Login</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="en-us" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="nyuicon.ico" rel="Shortcut Icon" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: Helvetica, sans-serif !important;
+        color: #3d4d5d;
+        font-size: 14px;
+        margin: 0 !important;
+        -webkit-text-size-adjust: none;
+        min-width: 375px;
+        background-color: #f4f4f4;
+      }
+      
+      .headerContent {
+        background-color: #57068c;
+        height: 60px;
+        display: flex;
+        align-items: center;
+      }
+      
+      .headerLogo {
+        max-width: 80%;
+        max-height: 80%;
+        padding-top: 8px;
+        margin-left: 10%;
+      }
+      
+      .pageTitle {
+        font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 40px;
+        color: #3d4d5d;
+      }
+      
+      .centerContent {
+        text-align: center;
+        margin: 20px auto;
+        padding: 10px;
+        min-width: 375px;
+        max-width: 500px;
+      }
+      
+      .textBoxContainer {
+        display: inline-block;
+        background-color: #f6f6f6;
+        padding: 15px;
+        margin: 20px auto;
+        width: 90%;
+        max-width: 500px;
+        min-width: 375px;
+      }
+      
+      .shadow {
+        -webkit-box-shadow: 0 0 5px rgba(50, 50, 50, 0.5);
+        -moz-box-shadow: 0 0 5px rgba(50, 50, 50, 0.5);
+        box-shadow: 0 0 5px rgba(50, 50, 50, 0.5);
+      }
+      
+      .rounded {
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+      }
+      
+      form {
+        margin-top: 20px;
+      }
+      
+      label {
+        display: block;
+        text-align: left;
+        margin: 10px 0 5px 5%;
+      }
+      
+      input[type="text"],
+      input[type="password"] {
+        width: 90%;
+        padding: 10px;
+        margin: 0 auto 10px auto;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        display: block;
+      }
+      
+      .buttonLink, .buttonSubmit {
+        width: 300px;
+        display: block;
+        background: #ffffff;
+        border: solid #008769 1px;
+        color: #008769;
+        font-size: 23px;
+        padding: 10px 20px;
+        text-decoration: none;
+        margin: 15px auto;
+        text-align: center;
+      }
+      
+      .buttonLink:hover, .buttonSubmit:hover {
+        color: #15a885;
+        border: solid #15a885 1px;
+      }
+      
+      .linksContainer {
+        text-align: center;
+        margin-top: 20px;
+      }
+      
+      .error {
+        color: red;
+        margin: 10px 0;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <main>
+      <!-- Header with Logo -->
+      <div id="header" class="headerContent">
+        <img class="headerLogo" alt="Logo" src="{{ url_for('static', filename='images/Logo.png') }}" />
+      </div>
+      
+      <!-- Page Title -->
+      <div class="pageTitle">Ticket Reserve System Login</div>
+      
+      <!-- Central Container -->
+      <div class="centerContent">
+        <div class="textBoxContainer shadow rounded">
+          <!-- Description -->
+          <div style="font-size: medium; text-align: center; margin-bottom: 20px;">
+            Sign in below to access the Ticket Reserve System portal.
+          </div>
+          <!-- Error Message -->
+          {% if error %}
+          <div class="error">{{ error }}</div>
+          {% endif %}
+          <!-- Login Form -->
+          <form method="post" action="/login">
+            <label for="username">
+              Username (Email):
+            </label>
+            <input type="text" name="username" id="username" required />
+            
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" required />
+            
+            <button type="submit" class="buttonSubmit">Login</button>
+          </form>
+          <!-- Additional Links -->
+          <div class="linksContainer">
+            <a href="/register" class="buttonLink">Register</a>
+            <a href="{{ url_for('public_flights') }}" class="buttonLink">Public Flight Check</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

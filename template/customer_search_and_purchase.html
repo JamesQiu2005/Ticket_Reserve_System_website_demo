@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+  <h2 class="mb-4 text-center">Search & Purchase Flights</h2>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" 
+        href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
+
+  <!-- Search Form -->
+  <form method="GET" action="{{ url_for('customer_search_and_purchase') }}" class="row g-3 mb-4">
+    <div class="col-md-4">
+      <label for="source_city_or_airport" class="form-label">Source (City or Airport)</label>
+      <input type="text" class="form-control" id="source_city_or_airport" name="source_city_or_airport" 
+             placeholder="e.g. Shanghai or PVG" 
+             value="{{ request.args.get('source_city_or_airport','') }}">
+    </div>
+    <div class="col-md-4">
+      <label for="destination_city_or_airport" class="form-label">Destination (City or Airport)</label>
+      <input type="text" class="form-control" id="destination_city_or_airport" name="destination_city_or_airport" 
+             placeholder="e.g. Beijing or PEK" 
+             value="{{ request.args.get('destination_city_or_airport','') }}">
+    </div>
+    <div class="col-md-3">
+      <label for="date" class="form-label">Date</label>
+      <input type="date" class="form-control" id="date" name="date" 
+             value="{{ request.args.get('date','') }}">
+    </div>
+    <div class="col-md-1 d-grid">
+      <button type="submit" class="btn btn-primary mt-4">Search</button>
+    </div>
+  </form>
+
+  <hr>
+
+  {% if error %}
+    <div class="alert alert-danger text-center">
+      {{ error }}
+    </div>
+  {% endif %}
+
+  {% if purchase_success %}
+    <div class="alert alert-success text-center">
+      Purchase successful!
+    </div>
+  {% endif %}
+
+  <!-- Display Search Results -->
+  {% if search_results %}
+    <div class="table-responsive">
+      <table id="searchFlightsTable" 
+             class="display table table-striped table-hover align-middle" 
+             style="width:100%">
+        <thead class="table-dark">
+          <tr>
+            <th>Flight Number</th>
+            <th>Airline</th>
+            <th>Departure</th>
+            <th>Arrival</th>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+            <th>Price</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for flight in search_results %}
+          <tr>
+            <td>{{ flight.flight_number }}</td>
+            <td>{{ flight.airline_name }}</td>
+            <td>{{ flight.departure_airport }}</td>
+            <td>{{ flight.arrival_airport }}</td>
+            <td>{{ flight.departure_time }}</td>
+            <td>{{ flight.arrival_time }}</td>
+            <td>{{ flight.price }}</td>
+            <td>
+              <!-- Purchase Button: Each row has a separate form -->
+              <form method="POST" action="{{ url_for('customer_search_and_purchase') }}">
+                <input type="hidden" name="flight_id" value="{{ flight.flight_id }}">
+                <button type="submit" class="btn btn-success btn-sm">Purchase</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% elif request.args.get('source_city_or_airport') or request.args.get('destination_city_or_airport') or request.args.get('date') %}
+    <div class="alert alert-warning text-center">
+      No flights found for your search criteria.
+    </div>
+  {% endif %}
+</div>
+
+<!-- jQuery + DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script 
+  src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js">
+</script>
+<script>
+  $(document).ready(function(){
+    $('#searchFlightsTable').DataTable({
+      paging:   true,
+      searching:true,
+      ordering: true,
+      info:     true,
+      autoWidth:false,
+      responsive:true
+    });
+  });
+</script>
+{% endblock %}

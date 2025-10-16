@@ -1,0 +1,61 @@
+{% extends "base_agent.html" %}
+
+{% block content %}
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container my-5">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0 text-center">My Commission Dashboard</h3>
+    </div>
+    <div class="card-body">
+      <!-- Date Range Filter -->
+      <form method="GET" action="{{ url_for('agent_commission') }}" class="row g-3 mb-4">
+        <div class="col-md-5">
+          <label for="start_date" class="form-label">From:</label>
+          <input type="date" id="start_date" name="start_date" class="form-control" 
+                 value="{{ request.args.get('start_date','') }}">
+        </div>
+        <div class="col-md-5">
+          <label for="end_date" class="form-label">To:</label>
+          <input type="date" id="end_date" name="end_date" class="form-control" 
+                 value="{{ request.args.get('end_date','') }}">
+        </div>
+        <div class="col-md-2 d-grid">
+          <button type="submit" class="btn btn-primary mt-4">Show</button>
+        </div>
+      </form>
+
+      <!-- Commission Stats -->
+      {% if stats %}
+        <div class="card mx-auto" style="max-width: 600px;">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Commission Summary</h5>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+              <tr>
+                <th>Total Commission</th>
+                <td>${{ stats.total_comm or 0 }}</td>
+              </tr>
+              <tr>
+                <th>Tickets Sold</th>
+                <td>{{ stats.tickets_sold or 0 }}</td>
+              </tr>
+              <tr>
+                <th>Avg. per Ticket</th>
+                <td>${{ stats.avg_comm or 0 }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      {% else %}
+        <div class="alert alert-warning text-center mt-4">
+          No commission data available.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
